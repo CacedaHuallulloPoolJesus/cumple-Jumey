@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Feliz Cumpleaños, Jumey! — Con todo mi corazón</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rosa-pastel: #f8d7e3;
+      --rosa-suave: #eec4d4;
+      --rojo-pastel: #e8a4b0;
+      --vino-suave: #8b4a5c;
+      --vino-profundo: #6b3a4a;
+      --crema: #fff8f5;
+      --blanco: #ffffff;
+      --dorado-suave: rgba(255, 220, 200, 0.6);
+      --sombra-rosa: rgba(139, 74, 92, 0.15);
+      --glass: rgba(255, 255, 255, 0.45);
+      --glass-borde: rgba(255, 255, 255, 0.7);
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 400;
+      color: var(--vino-profundo);
+      background: linear-gradient(
+        145deg,
+        #fff5f7 0%,
+        var(--rosa-pastel) 25%,
+        #fce8ef 50%,
+        var(--crema) 75%,
+        #f5e6ea 100%
+      );
+      background-attachment: fixed;
+      overflow-x: hidden;
+      line-height: 1.75;
+    }
+
+    /* Overlay de Bienvenida para permitir el Autoplay */
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 245, 247, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3rem, 7vw, 4.5rem);
+      color: var(--vino-profundo);
+      margin-bottom: 1rem;
+    }
+
+    .btn-open {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--blanco);
+      background: linear-gradient(135deg, var(--vino-suave) 0%, var(--rojo-pastel) 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 1.2rem 2.8rem;
+      cursor: pointer;
+      box-shadow: 0 8px 25px var(--sombra-rosa);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-open:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(139, 74, 92, 0.3);
+    }
+
+    /* Brillo ambiental */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(255, 200, 210, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 85% 80%, rgba(232, 164, 176, 0.25) 0%, transparent 45%),
+        radial-gradient(ellipse 50% 30% at 50% 50%, rgba(255, 248, 245, 0.5) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Partículas suaves */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--dorado-suave);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 200, 210, 0.8);
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 25%; left: 85%; animation-delay: 0.8s; width: 3px; height: 3px; }
+    .particle:nth-child(3) { top: 60%; left: 5%; animation-delay: 1.5s; }
+    .particle:nth-child(4) { top: 75%; left: 92%; animation-delay: 2s; }
+    .particle:nth-child(5) { top: 40%; left: 50%; animation-delay: 0.5s; width: 5px; height: 5px; }
+    .particle:nth-child(6) { top: 85%; left: 30%; animation-delay: 2.5s; }
+    .particle:nth-child(7) { top: 10%; left: 60%; animation-delay: 1.2s; }
+    .particle:nth-child(8) { top: 50%; left: 95%; animation-delay: 3s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+    /* Corazones flotantes CSS */
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .float-heart {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0;
+      color: var(--rojo-pastel);
+      filter: drop-shadow(0 2px 4px var(--sombra-rosa));
+      animation: floatUp linear infinite;
+    }
+
+    .float-heart:nth-child(1)  { left: 8%;  font-size: 1rem;   animation-duration: 14s; animation-delay: 0s; }
+    .float-heart:nth-child(2)  { left: 22%; font-size: 1.4rem; animation-duration: 18s; animation-delay: 2s; }
+    .float-heart:nth-child(3)  { left: 38%; font-size: 0.9rem; animation-duration: 12s; animation-delay: 4s; }
+    .float-heart:nth-child(4)  { left: 55%; font-size: 1.3rem; animation-duration: 16s; animation-delay: 1s; }
+    .float-heart:nth-child(5)  { left: 72%; font-size: 1.1rem; animation-duration: 20s; animation-delay: 3s; }
+    .float-heart:nth-child(6)  { left: 88%; font-size: 1.5rem; animation-duration: 15s; animation-delay: 5s; }
+    .float-heart:nth-child(7)  { left: 15%; font-size: 1.2rem; animation-duration: 17s; animation-delay: 7s; }
+    .float-heart:nth-child(8)  { left: 65%; font-size: 0.85rem; animation-duration: 13s; animation-delay: 6s; }
+    .float-heart:nth-child(9)  { left: 45%; font-size: 1.6rem; animation-duration: 19s; animation-delay: 8s; }
+    .float-heart:nth-child(10) { left: 92%; font-size: 1rem;   animation-duration: 11s; animation-delay: 2.5s; }
+
+    @keyframes floatUp {
+      0% {
+        bottom: -10%;
+        opacity: 0;
+        transform: translateX(0) rotate(0deg) scale(0.6);
+      }
+      10% { opacity: 0.5; }
+      50% {
+        opacity: 0.35;
+        transform: translateX(20px) rotate(15deg) scale(1);
+      }
+      90% { opacity: 0.15; }
+      100% {
+        bottom: 110%;
+        opacity: 0;
+        transform: translateX(-15px) rotate(-10deg) scale(0.8);
+      }
+    }
+
+    /* Corazones en esquinas */
+    .corner-heart {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.25;
+      z-index: 1;
+      animation: pulseCorner 3s ease-in-out infinite;
+    }
+
+    .corner-heart.tl { top: 1.5rem; left: 1.5rem; animation-delay: 0s; }
+    .corner-heart.tr { top: 1.5rem; right: 1.5rem; animation-delay: 0.5s; }
+    .corner-heart.bl { bottom: 1.5rem; left: 1.5rem; animation-delay: 1s; }
+    .corner-heart.br { bottom: 1.5rem; right: 1.5rem; animation-delay: 1.5s; }
+
+    @keyframes pulseCorner {
+      0%, 100% { transform: scale(1); opacity: 0.2; }
+      50% { transform: scale(1.15); opacity: 0.35; }
+    }
+
+    /* Contenedor principal */
+    .page-wrapper {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.25rem 3.5rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-borde);
+      border-radius: 28px;
+      padding: 3rem 2.75rem;
+      box-shadow:
+        0 8px 32px var(--sombra-rosa),
+        0 2px 8px rgba(255, 255, 255, 0.8) inset,
+        0 -1px 0 rgba(255, 255, 255, 0.5) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--rojo-pastel), var(--rosa-suave), var(--rojo-pastel), transparent);
+      opacity: 0.8;
+    }
+
+    .card::after {
+      content: '♥';
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      font-size: 1.5rem;
+      color: var(--rojo-pastel);
+      opacity: 0.3;
+    }
+
+    /* Decoración interna */
+    .deco-hearts {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.5rem;
+      color: var(--rojo-pastel);
+      opacity: 0.7;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header .pretitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--vino-suave);
+      margin-bottom: 0.75rem;
+    }
+
+    .header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 8vw, 4.2rem);
+      font-weight: 400;
+      color: var(--vino-profundo);
+      line-height: 1.2;
+      text-shadow: 0 2px 20px rgba(232, 164, 176, 0.4);
+    }
+
+    .header .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      font-style: italic;
+      color: var(--vino-suave);
+      margin-top: 0.5rem;
+    }
+
+    /* Reproductor de Audio */
+    .audio-container {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .audio-container p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--vino-suave);
+      margin-bottom: 0.5rem;
+    }
+
+    audio {
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      border-radius: 30px;
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--rojo-pastel), transparent);
+      margin: 1.75rem auto;
+    }
+
+    /* Texto del mensaje */
+    .letter-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+      color: var(--vino-profundo);
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .letter-body p {
+      margin-bottom: 1.35rem;
+    }
+
+    .letter-body .highlight {
+      font-style: italic;
+      color: var(--vino-suave);
+      font-weight: 600;
+    }
+
+    /* Sección de Imagen Final */
+    .final-image-container {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    .final-image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(139, 74, 92, 0.25);
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      transition: transform 0.4s ease;
+    }
+
+    .final-image-container img:hover {
+      transform: scale(1.02);
+    }
+
+    .signature {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .signature .name {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: var(--vino-profundo);
+    }
+
+    .signature .hearts-line {
+      font-size: 1.1rem;
+      color: var(--rojo-pastel);
+      margin-top: 0.25rem;
+      letter-spacing: 0.3rem;
+    }
+
+    .footer-deco {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--vino-suave);
+      opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 2.25rem 1.5rem;
+        border-radius: 22px;
+      }
+
+      .letter-body {
+        text-align: left;
+      }
+
+      .corner-heart {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cortina de Bienvenida -->
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <h1 class="welcome-title">Para ti, Jumey</h1>
+    <p style="margin-bottom: 2rem; color: var(--vino-suave);">Haz clic para abrir tu carta especial 💌</p>
+    <button class="btn-open" id="openBtn">Abrir Carta 💖</button>
+  </div>
+
+  <div class="particles" aria-hidden="true">
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+    <span class="particle"></span>
+  </div>
+
+  <div class="floating-hearts" aria-hidden="true">
+    <span class="float-heart">♥</span>
+    <span class="float-heart">♡</span>
+    <span class="float-heart">♥</span>
+    <span class="float-heart">♡</span>
+    <span class="float-heart">♥</span>
+    <span class="float-heart">♡</span>
+    <span class="float-heart">♥</span>
+    <span class="float-heart">♡</span>
+    <span class="float-heart">♥</span>
+    <span class="float-heart">♡</span>
+  </div>
+
+  <span class="corner-heart tl" aria-hidden="true">♥</span>
+  <span class="corner-heart tr" aria-hidden="true">♡</span>
+  <span class="corner-heart bl" aria-hidden="true">♡</span>
+  <span class="corner-heart br" aria-hidden="true">♥</span>
+
+  <main class="page-wrapper">
+    <article class="card">
+      <div class="deco-hearts" aria-hidden="true">♥ ♡ ♥</div>
+
+      <header class="header">
+        <p class="pretitle">Una carta desde el alma</p>
+        <h1>¡Feliz Cumpleaños, Jumey!</h1>
+        <p class="subtitle">Porque hay sentimientos que simplemente no desaparecen</p>
+      </header>
+
+      <!-- Reproductor de música -->
+      <div class="audio-container">
+        <p>🎵 Una canción para ti:</p>
+        <audio id="bgMusic" controls loop>
+          <source src="cancion.mp3" type="audio/mpeg">
+          Tu navegador no soporta el elemento de audio.
+        </audio>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <div class="letter-body">
+        <p>
+          Hoy es tu cumpleaños, y no podía dejar pasar este día en silencio.
+        </p>
+
+        <p>
+          Ha pasado mucho tiempo desde que nuestras historias se cruzaron, y, aunque hoy la distancia sea lo que más nos separa, todavía guardo intactos los recuerdos de lo que fuimos.
+        </p>
+
+        <p>
+          Todo empezó sin buscarlo, sin imaginar que algún día terminaríamos queriéndonos tanto. Me encantaba escucharte, perderme en tu mirada, en tus abrazos y en esa tranquilidad que encontraba simplemente estando a tu lado. Tu compañía fue, alguna vez, uno de esos lugares donde mi corazón se sentía en paz.
+        </p>
+
+        <p>
+          Fuiste mi refugio, incluso cuando yo mismo terminé convirtiéndome en distancia. Nunca supe explicarte mis miedos, mis dudas ni todo aquello que llevaba dentro, y quizás por eso terminé lastimando lo que más quería.
+        </p>
+
+        <p>
+          Hoy entiendo que el amor también necesita valentía, y muchas veces me faltó. Mis intentos por salvar lo nuestro quizá merecían una mejor versión de mí, una que supiera quedarse, hablar y luchar sin dejar que el miedo decidiera por ella.
+        </p>
+
+        <p>
+          No sé si estas palabras llegan a ti como antes, ni si todavía significan algo. Pero hay sentimientos que, aunque pase el tiempo y cambien las circunstancias, simplemente no desaparecen.
+        </p>
+
+        <p>
+          Te extraño más de lo que digo y, aunque hoy exista silencio entre nosotros, quiero que sepas que siempre voy a guardar un cariño inmenso por ti. Porque fuiste, eres y siempre serás una parte bonita de mi historia.
+        </p>
+
+        <p>
+          Hoy solo quiero desearte algo que quizá esté por encima de cualquier cosa que yo pueda darte: que seas feliz. Que la vida te abrace bonito, que cumplas cada uno de tus sueños y que nunca te falten motivos para sonreír. Y si alguna vez recuerdas lo que fuimos, espero que también recuerdes que, a pesar de mis errores, te quise de verdad.
+        </p>
+
+        <p class="highlight" style="text-align: center; font-size: 1.25rem; margin-top: 1.5rem;">
+          ¡Feliz cumpleaños! ❤️<br>
+          Ojalá la vida te regale toda la felicidad que mereces.
+        </p>
+      </div>
+
+      <!-- Imagen Final -->
+      <div class="final-image-container">
+        <img src="imagen 1.jpg" alt="Recuerdo especial para Jumey">
+      </div>
+
+      <div class="signature">
+        <p class="name">Con todo mi cariño</p>
+        <p class="hearts-line">♥ ♡ ♥ ♡ ♥</p>
+      </div>
+
+      <p class="footer-deco">Hecho con el corazón · Solo para ti en tu día especial</p>
+    </article>
+  </main>
+
+  <script>
+    const openBtn = document.getElementById('openBtn');
+    const overlay = document.getElementById('welcomeOverlay');
+    const audio = document.getElementById('bgMusic');
+
+    openBtn.addEventListener('click', () => {
+      // Ocultar pantalla de bienvenida
+      overlay.classList.add('hidden');
+      
+      // Iniciar la música automáticamente tras la interacción
+      audio.play().catch(error => {
+        console.log("Error al reproducir audio:", error);
+      });
+    });
+  </script>
+
+</body>
+</html>
